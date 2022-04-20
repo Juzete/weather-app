@@ -1,20 +1,27 @@
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
+  margin: 0 auto;
   background-color: rgb(255, 194, 189);
   background-size: cover;
   background-position: bottom;
   transition: 0.4 ease-out;
+  max-width: 380px;
+  max-height: 80vh;
+  min-width: 320px;
+  border-radius: 32px 32px 32px 32px;
 `;
 
 export const Main = styled.main`
-  min-height: 100vh;
+  min-height: 80vh;
   background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.2),
     rgba(0, 0, 0, 0.55)
   );
   padding: 25px;
+
+  border-radius: 32px 32px 32px 32px;
 `;
 
 export const SearchBox = styled.div`
@@ -75,7 +82,6 @@ export const Temperature = styled.div`
   position: relative;
   display: inline-block;
   margin: 30px auto;
-  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
 
   padding: 15px 25px;
@@ -87,7 +93,6 @@ export const Temperature = styled.div`
 
   text-shadow: 3px 6px rgba(50, 50, 70, 0.5);
   text-align: center;
-  box-shadow: 3px 6px rgba(0, 0, 0, 0.2);
 `;
 
 export const Weather = styled.div`

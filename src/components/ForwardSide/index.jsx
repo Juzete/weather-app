@@ -1,5 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useActions } from "../../hooks/useActions";
+import { weatherSelector } from "../../store/selectors";
 import dateBuilder from "../../utils/dateBuilder";
 import {
   DateWrapper,
@@ -18,21 +20,12 @@ const ForwardSide = () => {
   const [coords, setCoords] = useState({ lat: null, lon: null });
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState({});
+  const { fetchOneDayWeather } = useActions();
+  const allData = useSelector(weatherSelector);
 
   const onSearchHandler = (e) => {
     if (e.key === "Enter") {
-      axios
-        .get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
-        )
-        .then((response) => {
-          setWeather(response.data);
-          setCity("");
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      fetchOneDayWeather(city);
     }
   };
 
@@ -74,7 +67,8 @@ const ForwardSide = () => {
       //     console.log(error);
       //   });
     }
-  }, [coords]);
+    console.log(allData.oneDayWeather);
+  }, [allData]);
 
   return (
     <PageWrapper>
@@ -88,17 +82,20 @@ const ForwardSide = () => {
             onKeyDown={onSearchHandler}
           />
         </SearchBox>
-        {typeof weather.main != "undefined" ? (
+        {allData.oneDayWeather !== null ? (
           <div>
             <LocationWrapper>
               <Location>
-                {weather.name}, {weather.sys.country}
+                {allData.oneDayWeather.name},{" "}
+                {allData.oneDayWeather.sys.country}
               </Location>
               <DateWrapper>{dateBuilder(new Date())}</DateWrapper>
             </LocationWrapper>
             <WeatherWrapper>
-              <Temperature>{Math.round(weather.main.temp)}°С</Temperature>
-              <Weather>{weather.weather[0].main}</Weather>
+              <Temperature>
+                {Math.round(allData.oneDayWeather.main.temp)}°С
+              </Temperature>
+              <Weather>{allData.oneDayWeather.weather[0].main}</Weather>
             </WeatherWrapper>
           </div>
         ) : (
