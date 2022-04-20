@@ -19,15 +19,18 @@ import {
 const ForwardSide = () => {
   const [coords, setCoords] = useState({ lat: null, lon: null });
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState({});
   const { fetchOneDayWeather } = useActions();
+  const { fetchFiveDaysWeather } = useActions();
   const allData = useSelector(weatherSelector);
 
   const onSearchHandler = (e) => {
     if (e.key === "Enter") {
       fetchOneDayWeather(city);
+      fetchFiveDaysWeather(city);
     }
   };
+
+  const onChangeSearchHandler = (e) => setCity(e.target.value);
 
   const getSelfLocation = () => {
     const location = window.navigator && window.navigator.geolocation;
@@ -67,7 +70,6 @@ const ForwardSide = () => {
       //     console.log(error);
       //   });
     }
-    console.log(allData.oneDayWeather);
   }, [allData]);
 
   return (
@@ -76,8 +78,8 @@ const ForwardSide = () => {
         <SearchBox>
           <SearchBar
             type="text"
-            placeholder="Search..."
-            onChange={(e) => setCity(e.target.value)}
+            placeholder={"Search..."}
+            onChange={onChangeSearchHandler}
             value={city}
             onKeyDown={onSearchHandler}
           />
