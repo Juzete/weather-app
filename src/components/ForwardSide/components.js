@@ -6,9 +6,9 @@ export const PageWrapper = styled.div`
   background-size: cover;
   background-position: bottom;
   transition: 0.4 ease-out;
-  max-width: 380px;
+  max-width: 460px;
   max-height: 80vh;
-  min-width: 320px;
+  min-width: 400px;
   border-radius: 32px 32px 32px 32px;
 `;
 

@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   oneDayWeather: null,
-  fiveDayWeather: null,
+  fiveDaysWeather: null,
   error: null,
   loading: false,
 };
