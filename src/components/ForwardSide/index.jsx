@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
 import { useActions } from "../../hooks/useActions";
 import { weatherSelector } from "../../store/selectors";
 import dateBuilder from "../../utils/dateBuilder";
+import { setWeatherIcon } from "../../utils/setWeatherIcon";
 import {
   DateWrapper,
+  FlipButton,
   Location,
   LocationWrapper,
   Main,
@@ -16,7 +19,7 @@ import {
   WeatherWrapper,
 } from "./components";
 
-const ForwardSide = () => {
+const ForwardSide = ({ setIsFlipped, isSelfWeather, setIsSelfWeather }) => {
   const [coords, setCoords] = useState({ lat: null, lon: null });
   const [city, setCity] = useState("");
   const [currentTime, setCurrentTime] = useState(() => new Date().getTime());
@@ -36,12 +39,16 @@ const ForwardSide = () => {
     ) {
       fetchOneDayWeather(city);
       fetchFiveDaysWeather(city);
+      setIsSelfWeather("search");
     } else if (e.key === "Enter" && null != false) {
       setCurrentWeatherToView("search");
+      setIsSelfWeather("search");
     }
   };
 
   const onChangeSearchHandler = (e) => setCity(e.target.value);
+
+  const onFlipButtonClickHandler = () => setIsFlipped(true);
 
   useEffect(() => {
     if (coords.lat !== null && !allData.selfLocationOneDayWeather) {
@@ -51,8 +58,9 @@ const ForwardSide = () => {
   }, [coords]);
 
   useEffect(() => {
-    if (allData.selfLocationOneDayWeather) setCurrentWeatherToView("self");
-  }, [window.location, allData.selfLocationOneDayWeather]);
+    if (allData.selfLocationOneDayWeather && isSelfWeather === "self")
+      setCurrentWeatherToView("self");
+  }, [isSelfWeather]);
 
   useEffect(() => {
     const getSelfLocation = () => {
@@ -108,7 +116,17 @@ const ForwardSide = () => {
                 {Math.round(allData.currentWeatherOneDay.main.temp)}°С
               </Temperature>
               <Weather>{allData.currentWeatherOneDay.weather[0].main}</Weather>
+              <img
+                src={setWeatherIcon(
+                  allData.currentWeatherOneDay.weather[0].main
+                )}
+                height="170px"
+                alt="weather icon"
+              />
             </WeatherWrapper>
+            <FlipButton onClick={onFlipButtonClickHandler}>
+              Look more
+            </FlipButton>
           </div>
         ) : (
           ""
