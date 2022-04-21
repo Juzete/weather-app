@@ -2,18 +2,18 @@ import styled from "styled-components";
 
 export const PageWrapper = styled.div`
   margin: 0 auto;
-  background-color: rgb(153, 192, 255);
+  background-image: url("${({ background }) => background}");
   background-size: cover;
   background-position: bottom;
   transition: 0.4 ease-out;
   max-width: 460px;
-  max-height: 80vh;
+  height: 100vh;
   min-width: 400px;
   border-radius: 32px 32px 32px 32px;
 `;
 
 export const Main = styled.main`
-  min-height: 80vh;
+  height: 100vh;
   background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.1),

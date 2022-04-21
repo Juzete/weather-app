@@ -1,5 +1,31 @@
 import styled from "styled-components";
 
+export const PageWrapper = styled.div`
+  margin: 0 auto;
+  background-image: url("${({ background }) => background}");
+  background-size: cover;
+  background-position: bottom;
+  transition: 0.4 ease-out;
+  max-width: 460px;
+  max-height: 100vh;
+  min-width: 400px;
+  border-radius: 32px 32px 32px 32px;
+`;
+
+export const Main = styled.main`
+  min-height: 100vh;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1),
+    rgba(100, 100, 100, 0.3)
+  );
+  padding: 25px;
+
+  border-radius: 32px 32px 32px 32px;
+  display: flex;
+  align-items: center;
+`;
+
 export const FlipButton = styled.button`
   display: block;
   width: 150px;

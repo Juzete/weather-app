@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useActions } from "../../hooks/useActions";
 import { weatherSelector } from "../../store/selectors";
 import dateBuilder from "../../utils/dateBuilder";
+import { setWeatherBackground } from "../../utils/setWeatherBackground";
 import { setWeatherIcon } from "../../utils/setWeatherIcon";
 import {
   DateWrapper,
@@ -91,7 +92,11 @@ const ForwardSide = ({ setIsFlipped, isSelfWeather, setIsSelfWeather }) => {
   }, []);
 
   return (
-    <PageWrapper>
+    <PageWrapper
+      background={setWeatherBackground(
+        allData.currentWeatherOneDay.weather[0].main
+      )}
+    >
       <Main>
         <SearchBox>
           <SearchBar
