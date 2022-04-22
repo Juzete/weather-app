@@ -94,6 +94,7 @@ export const fetchSelfLocationFiveDaysWeather = (lat, lon) => {
         type: FETCH_SELF_LOCATION_FIVE_DAYS_WEATHER_SUCCESS,
         payload: response.data,
       });
+      dispatch(setCurrentWeatherToView("self"));
     } catch (e) {
       dispatch({
         type: FETCH_SELF_LOCATION_FIVE_DAYS_WEATHER_ERROR,

@@ -10,14 +10,14 @@ const WeatherList = () => {
   const printWeatherList = () => {
     const listToShow = [];
     for (let i = 0; i < 5; i++) {
-      const element = allData.currentWeatherFiveDays.list[i];
+      const element = allData.currentWeatherFiveDays?.list[i];
       listToShow.push(
-        <ListItem key={element.main.temp + element.wind.speed}>
-          <Wrapper>{Math.round(element.main.temp)}°С</Wrapper>
-          <Wrapper>{element.weather[0].main}</Wrapper>
+        <ListItem key={element.main.temp + element.wind.speed + i}>
+          <Wrapper>{Math.round(element?.main.temp)}°С</Wrapper>
+          <Wrapper>{element?.weather[0].main}</Wrapper>
           <Wrapper>
             <img
-              src={setWeatherIcon(element.weather[0].main)}
+              src={setWeatherIcon(element?.weather[0].main)}
               height="50px"
               alt="weather icon"
             />
@@ -25,6 +25,7 @@ const WeatherList = () => {
         </ListItem>
       );
     }
+
     return listToShow;
   };
 

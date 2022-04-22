@@ -8,12 +8,14 @@ export const PageWrapper = styled.div`
   transition: 0.4 ease-out;
   max-width: 460px;
   height: 100vh;
+  max-height: 760px;
   min-width: 400px;
   border-radius: 32px 32px 32px 32px;
 `;
 
 export const Main = styled.main`
   height: 100vh;
+  max-height: 760px;
   background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.1),

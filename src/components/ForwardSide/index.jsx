@@ -61,7 +61,7 @@ const ForwardSide = ({ setIsFlipped, isSelfWeather, setIsSelfWeather }) => {
   useEffect(() => {
     if (allData.selfLocationOneDayWeather && isSelfWeather === "self")
       setCurrentWeatherToView("self");
-  }, [isSelfWeather]);
+  }, [isSelfWeather, allData.selfLocationOneDayWeather]);
 
   useEffect(() => {
     const getSelfLocation = () => {
@@ -94,7 +94,7 @@ const ForwardSide = ({ setIsFlipped, isSelfWeather, setIsSelfWeather }) => {
   return (
     <PageWrapper
       background={setWeatherBackground(
-        allData.currentWeatherOneDay.weather[0].main
+        allData.currentWeatherOneDay?.weather[0].main
       )}
     >
       <Main>
