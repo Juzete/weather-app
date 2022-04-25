@@ -28,7 +28,7 @@ export const Main = styled.main`
   align-items: center;
 `;
 
-export const FlipButton = styled.button`
+export const Button = styled.button`
   display: block;
   width: 150px;
   height: 50px;
@@ -55,4 +55,13 @@ export const FlipButton = styled.button`
     background-color: rgba(255, 255, 255, 0.75);
     cursor: pointer;
   }
+`;
+
+export const Title = styled.div`
+  margin-top: 10px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
 `;

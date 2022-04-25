@@ -33,7 +33,6 @@ export const fetchOneDayWeather = (city) => {
         type: FETCH_ONE_DAY_WEATHER_SUCCESS,
         payload: response.data,
       });
-      dispatch(setCurrentWeatherToView("search"));
     } catch (e) {
       dispatch({
         type: FETCH_ONE_DAY_WEATHER_ERROR,
@@ -54,6 +53,7 @@ export const fetchFiveDaysWeather = (city) => {
         type: FETCH_FIVE_DAYS_WEATHER_SUCCESS,
         payload: response.data,
       });
+      dispatch(setCurrentWeatherToView("search"));
     } catch (e) {
       dispatch({
         type: FETCH_FIVE_DAYS_WEATHER_ERROR,
