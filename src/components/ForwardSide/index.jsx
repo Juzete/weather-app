@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
 import { useActions } from "../../hooks/useActions";
 import { weatherSelector } from "../../store/selectors";
 import dateBuilder from "../../utils/dateBuilder";
+import { setWeatherBackground } from "../../utils/setWeatherBackground";
+import { setWeatherIcon } from "../../utils/setWeatherIcon";
 import {
   DateWrapper,
+  FlipButton,
   Location,
   LocationWrapper,
   Main,
@@ -16,87 +20,118 @@ import {
   WeatherWrapper,
 } from "./components";
 
-const ForwardSide = () => {
+const ForwardSide = ({ setIsFlipped, isSelfWeather, setIsSelfWeather }) => {
   const [coords, setCoords] = useState({ lat: null, lon: null });
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState({});
+  const [currentTime, setCurrentTime] = useState(() => new Date().getTime());
   const { fetchOneDayWeather } = useActions();
+  const { fetchFiveDaysWeather } = useActions();
+  const { fetchSelfLocationOneDayWeather } = useActions();
+  const { fetchSelfLocationFiveDaysWeather } = useActions();
+  const { setCurrentWeatherToView } = useActions();
+  const { setWeatherTime } = useActions();
+  const { refreshWeather } = useActions();
   const allData = useSelector(weatherSelector);
 
   const onSearchHandler = (e) => {
-    if (e.key === "Enter") {
+    if (
+      e.key === "Enter" &&
+      city.toLowerCase() !== allData.oneDayWeather?.name.toLowerCase()
+    ) {
       fetchOneDayWeather(city);
+      fetchFiveDaysWeather(city);
+      setIsSelfWeather("search");
+    } else if (e.key === "Enter" && null != false) {
+      setCurrentWeatherToView("search");
+      setIsSelfWeather("search");
     }
   };
 
-  const getSelfLocation = () => {
-    const location = window.navigator && window.navigator.geolocation;
+  const onChangeSearchHandler = (e) => setCity(e.target.value);
 
-    if (location) {
-      location.getCurrentPosition(
-        (position) => {
-          setCoords({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        (error) => {
-          setCoords({ lat: "err-latitude", lon: "err-longitude" });
-        }
-      );
-    }
-  };
+  const onFlipButtonClickHandler = () => setIsFlipped(true);
 
   useEffect(() => {
+    if (coords.lat !== null && !allData.selfLocationOneDayWeather) {
+      fetchSelfLocationOneDayWeather(coords.lat, coords.lon);
+      fetchSelfLocationFiveDaysWeather(coords.lat, coords.lon);
+    }
+  }, [coords]);
+
+  useEffect(() => {
+    if (allData.selfLocationOneDayWeather && isSelfWeather === "self")
+      setCurrentWeatherToView("self");
+  }, [isSelfWeather, allData.selfLocationOneDayWeather]);
+
+  useEffect(() => {
+    const getSelfLocation = () => {
+      const location = window.navigator && window.navigator.geolocation;
+
+      if (location) {
+        location.getCurrentPosition(
+          (position) => {
+            setCoords({
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            });
+          },
+          (error) => {
+            setCoords({ lat: "err-latitude", lon: "err-longitude" });
+          }
+        );
+      }
+    };
+
+    const time = currentTime;
+    if (!allData.weatherTime) setWeatherTime(time);
+    if (currentTime - allData.weatherTime > 3600000 && allData.weatherTime) {
+      refreshWeather();
+      setWeatherTime(time);
+    }
     getSelfLocation();
   }, []);
 
-  useEffect(() => {
-    if (coords.lat !== null) {
-      // axios
-      //   // .get(
-      //   //   `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${process.env.REACT_APP_API_KEY}`
-      //   // )
-      //   // .get(
-      //   //   `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.lat}&lon=${coords.lon}&appid=${process.env.REACT_APP_API_KEY}`
-      //   // )
-      //   .then((response) => {
-      //     console.log(response.data);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
-    }
-    console.log(allData.oneDayWeather);
-  }, [allData]);
-
   return (
-    <PageWrapper>
+    <PageWrapper
+      background={setWeatherBackground(
+        allData.currentWeatherOneDay?.weather[0].main
+      )}
+    >
       <Main>
         <SearchBox>
           <SearchBar
             type="text"
-            placeholder="Search..."
-            onChange={(e) => setCity(e.target.value)}
+            placeholder={"Search..."}
+            onChange={onChangeSearchHandler}
             value={city}
             onKeyDown={onSearchHandler}
           />
         </SearchBox>
-        {allData.oneDayWeather !== null ? (
+        {allData.currentWeatherOneDay !== null ? (
           <div>
             <LocationWrapper>
               <Location>
-                {allData.oneDayWeather.name},{" "}
-                {allData.oneDayWeather.sys.country}
+                {allData.currentWeatherOneDay.name},{" "}
+                {allData.currentWeatherOneDay.sys.country}
               </Location>
               <DateWrapper>{dateBuilder(new Date())}</DateWrapper>
             </LocationWrapper>
             <WeatherWrapper>
               <Temperature>
-                {Math.round(allData.oneDayWeather.main.temp)}°С
+                {Math.round(allData.currentWeatherOneDay.main.temp)}°С
               </Temperature>
-              <Weather>{allData.oneDayWeather.weather[0].main}</Weather>
+              <Weather>{allData.currentWeatherOneDay.weather[0].main}</Weather>
+              <img
+                src={setWeatherIcon(
+                  allData.currentWeatherOneDay.weather[0].main
+                )}
+                height="170px"
+                alt="weather icon"
+              />
             </WeatherWrapper>
+            <FlipButton onClick={onFlipButtonClickHandler}>
+              Look more
+            </FlipButton>
           </div>
         ) : (
           ""
